@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
+[hidden]{display:none!important}
 :root{--bg:#EAF0FC;--ink:#0A1230;--mut:#5A6785;--line:#D3DCF0;--card:#fff;--soft:#F1F5FD;--blue:#2B4BFF;--mint:#0FB388;--amber:#F07A1E;--rose:#E5384B;--violet:#8B5CF6;--paper:#fff;--pi:#0A1230;--pm:#6B7794;color-scheme:light}
 @media (prefers-color-scheme:dark){:root{--bg:#070B1A;--ink:#EAF0FF;--mut:#8B99B8;--line:#1D2745;--card:#0E1530;--soft:#131C3A;--blue:#5B7BFF;--mint:#2FD6A6;--amber:#FF9A4D;--rose:#FF6577;--violet:#A98BFF;color-scheme:dark}}
 *{box-sizing:border-box}
@@ -104,6 +105,7 @@ dialog::backdrop{background:rgba(7,11,26,.55);backdrop-filter:blur(3px)}
 </style>
 </head>
 <body>
+<script>window.onerror=function(m,s,l){document.body.insertAdjacentHTML("afterbegin",'<pre style="background:#900;color:#fff;padding:10px;white-space:pre-wrap;position:relative;z-index:99">'+m+" (line "+l+")</pre>")}</script>
 <div class="wrap">
 <header>
 <div class="logo"><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="2" width="26" height="28" rx="9" fill="var(--blue)"/><g class="eyes"><circle cx="12" cy="14" r="2.6" fill="#fff"/><circle cx="20" cy="14" r="2.6" fill="#fff"/></g><path d="M11 21c2.6 2.4 7.4 2.4 10 0" stroke="#fff" stroke-width="2.2" stroke-linecap="round" fill="none"/></svg>Billy</div>
@@ -233,4 +235,12 @@ function typeOut(t){
 }
 async function remind(){
   clearInterval(timer);$("#rm").textContent="Billy is writing…";
-  try{const d=await api("/api/reminder",{client:cur.client,amount:cur.amount,currency:cur.currency,due:cur.due,status:cur.status,tone});typeOut(d.messa
+  try{const d=await api("/api/reminder",{client:cur.client,amount:cur.amount,currency:cur.currency,due:cur.due,status:cur.status,tone});typeOut(d.message)}
+  catch(x){$("#rm").textContent=x.message}
+}
+$("#copy").onclick=async e=>{try{await navigator.clipboard.writeText(msgText);e.target.textContent="Copied"}catch{e.target.textContent="Select and copy"}setTimeout(()=>e.target.textContent="Copy message",1600)};
+$("#close").onclick=()=>$("#dlg").close();
+load();
+</script>
+</body>
+</html>
